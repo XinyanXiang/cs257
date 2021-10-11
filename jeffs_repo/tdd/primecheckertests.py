@@ -17,8 +17,8 @@ class PrimeCheckerTester(unittest.TestCase):
         pass
 
     def test_zero(self):
-        with self.assertRaises(ValueError):
-             self.prime_checker.is_prime(0)
+        self.assertFalse(self.prime_checker.is_prime(0))
+            
         print("tzero")
 
     def test_two(self):
@@ -43,6 +43,7 @@ class PrimeCheckerTester(unittest.TestCase):
         print("prime below")
 
     def test_negative(self):
+        # self.assertRaises(ValueError,self.prime_checker.is_prime,0)
         with self.assertRaises(ValueError):
              self.prime_checker.is_prime(-50)
 if __name__ == '__main__':
