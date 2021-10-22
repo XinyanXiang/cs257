@@ -1,5 +1,5 @@
 # convert.py
-# Written by Xinyan Xiang, Oct 14, 2021
+# Written by Xinyan Xiang, Oct 21, 2021
 
 import csv
 
@@ -13,7 +13,7 @@ games = "games.csv"
 events = "events.csv"
 nocs = "nocs.csv"
 athletes_games_noc_biometrics = "athletes_games_noc_biometrics.csv"
-athletes_games_metal = "athletes_games_metal.csv"
+athletes_games_medal = "athletes_games_medal.csv"
 
 # column name for each generated csv file 
 athletes_fields = ['id','surname', 'given_name', 'sex']
@@ -21,56 +21,56 @@ games_fields = ['id','game_name', 'year', 'season',"city"]
 events_fields = ['id','event_name', "sport"]
 nocs_fields = ['id','noc',"region"]
 athletes_games_noc_biometrics_fields = ["athletes_id","game_id","noc_id","age","height","weight"]
-athletes_games_metal_fields = ["athletes_id","game_id","event_id","metal"]
+athletes_games_medal_fields = ["athletes_id","game_id","event_id","medal"]
 
-# lists for events.csv, nocs.csv, and athletes.csv
-athletes_id = []
-games_list = []
-events_list = []
-nocs_list = []
-athletes_games_noc_biometrics_list = []
+# dictionary for events.csv, nocs.csv, and athletes.csv
+athletes_id = {}
+games_list = {}
+events_list = {}
+nocs_list = {}
 
-# Create events.csv
+# Create events.csv with columns: 'id','event_name', "sport"
 with open(athlete_events_filename, 'r') as athlete_events_file:
     athlete_events_reader = csv.reader(athlete_events_file)
     header = next(athlete_events_reader)
     with open(events, 'w') as events_file:
         events_writer = csv.writer(events_file)
-        # events_writer.writerow(events_fields)
         event_id = 1
-        for athlete_events_row in athlete_events_reader:      
-            if athlete_events_row[13] not in events_list:
-                event_name = athlete_events_row[13]
+        for athlete_events_row in athlete_events_reader:
+            event_name = athlete_events_row[13] 
+            if event_name not in events_list:
                 sport = athlete_events_row[12]
                 events_writer.writerow([event_id,event_name,sport])
-                events_list.append(athlete_events_row[13])
+                events_list[event_name] = event_id
                 event_id = event_id + 1
-  
-# Create games.csv
+    events_file.close()
+athlete_events_file.close()
+
+# Create games.csv with columns: 'id','game_name', 'year', 'season',"city"
 with open(athlete_events_filename, 'r') as athlete_events_file:
     athlete_events_reader = csv.reader(athlete_events_file)
     header = next(athlete_events_reader)
     with open(games, 'w') as games_file:
         games_writer = csv.writer(games_file)
-        # games_writer.writerow(games_fields)
         game_id = 1
         for athlete_events_row in athlete_events_reader:
-            if athlete_events_row[8] not in games_list:
-                game_name = athlete_events_row[8]
+            game_name = athlete_events_row[8]
+            if game_name not in games_list:
                 year = athlete_events_row[9]
                 season = athlete_events_row[10]
                 city = athlete_events_row[11]
-                games_writer.writerow([game_id,game_name,str(year),season,city])
-                games_list.append(athlete_events_row[8])
+                games_writer.writerow([game_id,game_name,year,season,city])
+                games_list[game_name] = game_id
                 game_id = game_id + 1 
- 
-# Create athletes.csv
+    games_file.close()
+athlete_events_file.close()
+  
+# Create athletes.csv: 'id','surname', 'given_name', 'sex'
 with open(athlete_events_filename, 'r') as athlete_events_file:
     athlete_events_reader = csv.reader(athlete_events_file)
     header = next(athlete_events_reader)
     with open(athletes, 'w') as athletes_file:
         athletes_writer = csv.writer(athletes_file)
-        # athletes_writer.writerow(athletes_fields)
         for athlete_events_row in athlete_events_reader:
             if athlete_events_row[0] not in athletes_id:
                 athlete_name = athlete_events_row[1].split(" ")
@@ -79,28 +79,31 @@ with open(athlete_events_filename, 'r') as athlete_events_file:
                 else:
                     athlete_surname = athlete_name[-1]
                 athlete_given_name = athlete_name[0]
-                athletes_id.append(athlete_events_row[0])
-                athletes_writer.writerow([str(athlete_events_row[0]),athlete_surname,athlete_given_name,athlete_events_row[2]])
-
-# Create nocs.csv
+                athletes_id[athlete_events_row[0]] = athlete_events_row[1]
+                athletes_writer.writerow([athlete_events_row[0],athlete_surname,athlete_given_name,athlete_events_row[2]])
+    athletes_file.close()
+athlete_events_file.close()
+ 
+# Create nocs.csv with columns: 'id','noc',"region"
 with open(noc_regions_filename, 'r') as noc_regions_file:
     noc_regions_reader = csv.reader(noc_regions_file)
     header = next(noc_regions_reader)
     with open(nocs, 'w') as nocs_file:
         nocs_writer = csv.writer(nocs_file)
-        # nocs_writer.writerow(nocs_fields)
         noc_id = 1
-        for noc_regions_row in noc_regions_reader:      
-            if noc_regions_row[0] not in nocs_list:
-                noc = noc_regions_row[0]
+        for noc_regions_row in noc_regions_reader: 
+            noc = noc_regions_row[0]     
+            if noc not in nocs_list:
                 region = noc_regions_row[1]
                 nocs_writer.writerow([noc_id,noc,region])
-                nocs_list.append(noc_regions_row[0])
+                nocs_list[noc] = noc_id
                 noc_id = noc_id + 1
+    nocs_file.close()
+noc_regions_file.close()
 
-# lists used or athletes_games_noc_biometrics.csv and athletes_games_metal.csv
-athletes_games_list = []
-athletes_games_events_list = []
+# lists or dictionaries used or athletes_games_noc_biometrics.csv and athletes_games_medal.csv
+athletes_games_list = {}
+athletes_games_events_list = {}
 games_information_list = []
 nocs_information_list = []
 events_information_list = []
@@ -119,37 +122,38 @@ with open(events, 'r') as events_file:
      for event_row in events_reader:
          events_information_list.append(event_row[1])
 
-# Create athletes_games_noc_biometrics.csv
+# Create athletes_games_noc_biometrics.csv with columns: "athletes_id","game_id","noc_id","age","height","weight"
 with open(athlete_events_filename, 'r') as athlete_events_file:
     athlete_events_reader = csv.reader(athlete_events_file)
     header = next(athlete_events_reader)
     with open(athletes_games_noc_biometrics, 'w') as athletes_games_noc_biometrics_file:
-        athletes_games_noc_biometrics_writer = csv.writer(athletes_games_noc_biometrics_file)
-        # athletes_games_noc_biometrics_writer.writerow(athletes_games_noc_biometrics_fields)    
+        athletes_games_noc_biometrics_writer = csv.writer(athletes_games_noc_biometrics_file) 
         for athlete_events_row in athlete_events_reader:
-            if [athlete_events_row[8],athlete_events_row[1]] not in athletes_games_list:
+            if (athlete_events_row[8],athlete_events_row[1]) not in athletes_games_list:
                 athlete_id = athlete_events_row[0]
                 age = athlete_events_row[3]
                 height = athlete_events_row[4]
                 weight = athlete_events_row[5]
-                game_id = games_information_list.index(athlete_events_row[8])
-                noc_id = nocs_information_list.index(athlete_events_row[7])
+                game_id = games_information_list.index(athlete_events_row[8]) + 1
+                noc_id = nocs_information_list.index(athlete_events_row[7]) + 1
                 athletes_games_noc_biometrics_writer.writerow([athlete_id,game_id,noc_id,age,height,weight])
-                athletes_games_list.append([athlete_events_row[8],athlete_events_row[1]])
+                athletes_games_list[(athlete_events_row[8],athlete_events_row[1])] = athlete_id
     athletes_games_noc_biometrics_file.close()
+athlete_events_file.close()
 
-# Create athletes_games_metal.csv
+# Create athletes_games_medal.csv with columns: "athletes_id","game_id","event_id","medal"
 with open(athlete_events_filename, 'r') as athlete_events_file:
     athlete_events_reader = csv.reader(athlete_events_file)
     header = next(athlete_events_reader)
-    with open(athletes_games_metal, 'w') as athletes_games_metal_file:
-        athletes_games_metal_writer = csv.writer(athletes_games_metal_file)
-        # athletes_games_metal_writer.writerow(athletes_games_metal_fields)    
+    with open(athletes_games_medal, 'w') as athletes_games_medal_file:
+        athletes_games_medal_writer = csv.writer(athletes_games_medal_file)   
         for athlete_events_row in athlete_events_reader:
-            if [athlete_events_row[8],athlete_events_row[1],athlete_events_row[13]] not in athletes_games_events_list:
+            if (athlete_events_row[8],athlete_events_row[1],athlete_events_row[13]) not in athletes_games_events_list:
                 athlete_id = athlete_events_row[0]
-                game_id = games_information_list.index(athlete_events_row[8])
-                event_id = events_information_list.index(athlete_events_row[13])
-                metal = athlete_events_row[14]
-                athletes_games_metal_writer.writerow([athlete_id,game_id,event_id,metal])
-                athletes_games_events_list.append([athlete_events_row[8],athlete_events_row[1],athlete_events_row[13]])
+                game_id = games_information_list.index(athlete_events_row[8]) + 1
+                event_id = events_information_list.index(athlete_events_row[13]) + 1
+                medal = athlete_events_row[14]
+                athletes_games_medal_writer.writerow([athlete_id,game_id,event_id,medal])
+                athletes_games_events_list[(athlete_events_row[8],athlete_events_row[1],athlete_events_row[13])] = athlete_id 
+    athletes_games_medal_file.close()
+athlete_events_file.close()

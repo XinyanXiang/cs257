@@ -43,10 +43,10 @@ CREATE TABLE athletes_games_noc_biometrics(
 );
 -- \copy athletes_games_noc_biometrics FROM 'athletes_games_noc_biometrics.csv' DELIMITER ',' CSV NULL AS 'NULL'
 
-CREATE TABLE athletes_games_metal(
+CREATE TABLE athletes_games_medal(
 	athletes_id INTEGER,
 	game_id INTEGER,
 	event_id INTEGER,
-	metal TEXT
+	medal TEXT
 );
--- \copy athletes_games_metal FROM 'athletes_games_metal.csv' DELIMITER ',' CSV NULL AS 'NULL'
+-- \copy athletes_games_medal FROM 'athletes_games_medal.csv' DELIMITER ',' CSV NULL AS 'NULL'

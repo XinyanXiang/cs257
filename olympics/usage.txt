@@ -1,0 +1,63 @@
+                   Xinyan’s olympics.py usage.txt
+
+NAME
+	python3 olympics.py  -- Olympics Database Searching Tool
+
+SYNOPSIS
+	olympics.py -anoc [nocString]
+	olympics.py -n [nocString] -cm [medalString]
+	olympics.py -am -fn firstName -ln Lastname
+	olympics,py -h
+
+DESCRIPTION
+   
+    olympics.py will search through the database by flags: it can search for athletes working for a specific NOC, list specific NOC or all the NOCs and the    			    
+    number of medals it or they have won, and search all the medals won by a specific athlete. Only one of -anoc, -n, or -am can be used at a time.  
+	
+    Users can also view help statements. 
+
+    The following options are available:
+	
+	-anoc --athlete_noc		
+		List the names of all the athletes from a specified NOC, sorted by surname. But if the NOC is not given by the user, this program will list all the athletes from all NOCs. The search string of a certain NOC is not case sensitive. 
+
+	-n --noc	             
+		Search database for a specified NOC. If NOC is not given, this program will search all NOCs. This flag must be used with the flag -cm.
+
+    	-cm count_medal
+		Mandatory flag for -n. Count the number of a certain type of medals that a specified NOC has won. If NOC is not given, count the number of a certain type of medals that each NOC in the database has won and list them in decreasing order of the number of this type of medals. The type of medal is given by the user. If the type of medal is not given, then count all different types of medals in total. Therefore, for example “-n USA -cm” means counts the number of all kinds of medals has won by USA. “-n -cm Gold” will list all the NOCs and the number of gold medals they have won, in decreasing order of the number of gold medals. 
+	
+	-am athlete_medal
+		Search database for a specified athlete and list all the medals awarded by this athlete. This flag must be used with -fn and -ln.
+
+	-fn —first_name 
+		Mandatory flag for -am, specifying the first name of the athlete. 
+   
+	-ln —last_name 
+		Mandatory flag for -am, specifying the lasst name of the athlete.
+
+	-h --help      
+		Print usage statement
+
+
+    	It is an error if -n is not used with -cm.
+    	It is an error if -am is not used with -fn and -ln.
+
+     	Example code: 
+			python3 olympics.py -anoc
+			python3 olympics.py -anoc USA (For this assignment’s requirement)
+			python3 olympics.py -n -cm 
+			python3 olympics.py -n -cm Gold (For this assignment’s requirement)
+			python3 olympics.py -n USA -cm Gold 
+			python3 olympics.py -am -fn John -ln Yerman (For this assignment’s requirement)
+
+                  
+
+
+
+
+
+
+
+
+
